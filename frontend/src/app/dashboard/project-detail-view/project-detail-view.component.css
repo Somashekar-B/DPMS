@@ -1,0 +1,35 @@
+.header{
+  display: block;
+  padding: 50px ;
+  justify-content: center;
+  /* background: linear-gradient(rgb(110, 48, 255),rgb(76, 195, 224)); */
+  background: linear-gradient(rgb(255, 102, 0),rgb(255, 196, 0));
+  border-radius: 0 0 70% 70%;
+  margin-bottom:40px;
+}
+
+.content{
+  margin:0 10%;
+}
+
+.head ul{
+  list-style: none;
+}
+.head ul li{
+  font-size: 15px;
+}
+
+.error{
+  color: red;
+}
+
+.msg{
+  display: flex;
+  justify-content: center;
+}
+
+.reviews ul li{
+  list-style: none;
+  font-size: large;
+}
+

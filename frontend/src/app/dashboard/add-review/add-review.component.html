@@ -1,0 +1,117 @@
+<div class="dashboard">
+    <div class="sidenav">
+        <app-sidenav></app-sidenav>
+    </div>
+    <div class="body">
+        <div class="content">
+            <div class="header text-center">
+                <h1>Add Project Reviews</h1>
+            </div>
+            <div class="msg">
+                <span *ngIf="falseID" class="alert alert-danger text-center">Project with ID not found</span>
+                <span *ngIf="success" class="alert alert-success text-center">Review {{successWord}} Successfully</span>
+                <!-- <span *ngIf="updateSuccess" class="alert alert-success text-center">Review Updated Successfully</span> -->
+                <span *ngIf="fail" class="alert alert-danger text-center">Review failed to {{failWord}} please check don't mention duplicate Label Name</span>
+                
+            </div>
+            <div class="form">
+               <form [formGroup]="projectID">
+                <div class="col-lg-12 form">
+                    <mat-form-field class="col-lg-4">
+
+                        <mat-label><mat-icon class="mat-18">near_me</mat-icon>Enter Project ID</mat-label>
+                        <input matInput formControlName="proID" type="text" name="name"  #name placeholder="Enter new Faculty name"  />
+                        <mat-hint class="error" *ngIf="(pro.touched && pro.value.length==0); else elseblock">Project ID is required</mat-hint>
+                        <ng-template #elseblock>
+                          <mat-hint *ngIf="pro.touched && pro.invalid" class="error">Project ID is invalid</mat-hint>
+                        </ng-template>
+                        
+                      </mat-form-field>
+                      <button mat-raised-button color="primary" class="submit" (click)="getvalue()">search</button>
+                </div>
+               </form>
+               <h6 class="text-center" style="color: blue; font-weight:bold; margin-top:25px">Note: Project ID is in the format : 'Year-Level-Department-Semester-Project Type-Batch' (EX: 18UGCS5MNB15)</h6>
+            </div>
+
+            <h3 *ngIf="unauthorized" class="text-center" style="margin-top: 40px; color: red;">You are not authorized to access this project</h3>
+
+            <div *ngIf="found" class="details" style="margin: 10px 20px;">
+                <hr>
+                <h5>PROJECT DETAILS</h5>
+                <hr>
+                <table class="table-sm col-lg-12 table-borderless">
+                    <tr>
+                        <th>Project ID </th>
+                        <td>{{proId}}</td>
+                    </tr>
+                    <tr><th>Project Title </th>
+                    <td>{{proTitle}}</td></tr>
+                    <tr>
+                        <th>Guided By </th>
+                        <td>{{guide}}</td>
+                    </tr>
+                    <tr>
+                        <th>Students</th>
+                        <td>
+                            <ul>
+                                <li *ngFor="let stu of students">
+                                    <tr>
+                                        <td>{{stu.USN}}</td>
+                                        <td>{{stu.NAME}}</td>
+                                    </tr>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <h5>REVIEWS</h5>
+                <hr>
+                <table *ngIf="isReviewsAdded; else noReviews;" class="table-sm table-borderless">
+                    <tr *ngFor="let review of reviews">
+                        <th>{{review.LABEL}}</th>
+                        <td>{{review.DESCRIPTION}}</td>
+                        <td><mat-icon class="mat-18" (click)="autofillForm(review.LABEL, review.DESCRIPTION)" style="cursor:pointer; color:blue">create</mat-icon></td>
+                        <td><mat-icon class="mat-18" (click)="deleteReview(review.LABEL)" style="cursor:pointer; color: red;">delete</mat-icon></td>
+                    </tr>
+                </table>
+                <ng-template #noReviews>
+                    <h4 class="error">No Reviews had been added yet</h4>
+                </ng-template>
+            </div>
+            <hr>
+            <div class="add-review" *ngIf="found" style="margin: 10px 20px;">
+                <h5>ADD NEW REVIEW</h5>
+                <form [formGroup]="reviewForm" (ngSubmit)="reviewSubmit()">
+                    <div class="col-lg-12 form-item">
+
+                        <mat-form-field class="col-lg-4">
+            
+                          <mat-label><mat-icon class="mat-18">label_important</mat-icon>Label</mat-label>
+                          <input matInput  type="text" name="label"  formControlName="label" #label placeholder="Enter Label for Description"/>
+                          <mat-hint *ngIf="(label.value.length==0 && label.touched); else lelseblock" class="error">Label is required</mat-hint>
+                          <ng-template #lelseblock>
+                            <mat-hint *ngIf="label.touched && label.invalid" class="error">Label is invalid</mat-hint>
+                          </ng-template>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-12 form-item">
+
+                        <mat-form-field class="col-lg-4">
+            
+                          <mat-label><mat-icon class="mat-18">description</mat-icon>Description</mat-label>
+                          <!-- <input matInput  type="text" name="label"  formControlName="label" #label placeholder="Enter Label for Description"/> -->
+                          <textarea name="description" matInput formControlName="description"></textarea>
+                          <mat-hint *ngIf="(description.value.length==0 && description.touched) else delseblock" class="error">Description is required</mat-hint>
+                          <ng-template #delseblock>
+                            <mat-hint *ngIf="description.touched && description.invalid" class="error">Description is invalid</mat-hint>
+                          </ng-template>
+                        </mat-form-field>
+                    </div>
+                    <button mat-raised-button [color]="(reviewForm.valid ? 'primary' : 'warn')" [type]="reviewForm.valid ? 'submit' : 'button' ">{{buttonName}}</button>
+                    <button *ngIf="update" style="background-color: black; color: white; margin-left: 20px;" mat-raised-button [color]="secondary" (click)="cancelUpdate()" type="button" >Cancel Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="dashboard">
+    <div class="sidenav">
+      <app-sidenav></app-sidenav>
+    </div>
+    <div class="body">
+      <div class="content ">
+        <div class="header text-center">
+          <h1>Students Request to Create Account</h1>
+        </div>
+  
+        <div class="msg">
+          <!-- <span *ngIf="success" class="alert alert-success text-center">User has been removed successfully</span>
+          <span *ngIf="!mailSent" class="alert alert-danger text-center">User has been deleted but failed to send mail</span>
+          <span *ngIf="fail" class="alert alert-danger text-center">Failed to remove user: Unknown Error</span>
+          <span *ngIf="accessChangesuccess" class="alert alert-success text-center"> Access Changed Successfully</span>
+          <span *ngIf="accessChangeFailure" class="alert alert-danger text-center"> Access Change Failed</span> -->
+        </div>
+  
+        <div class="container animate__animated animate__fadeIn">
+          <table class="table table-striped hover" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+              <tr>
+                <th>Sl No</th>
+                <th>USN</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Operations</th>
+              </tr>
+            </thead>
+            <tbody>
+             <tr *ngFor="let user of allUsers; let i=index">
+                   <td>{{i+1}}</td>
+                   <td>{{user.USN}}</td>
+                   <td>{{user.NAME}}</td>
+                   <td>{{user.MOBILE_NO}}</td>
+                   <td>{{user.EMAIL}}</td>
+                   <td class="ops">
+                    <button style="cursor: pointer;" mat-raised-button color="primary" (click)='approve(user.USN)'>Approve</button>
+                    <button style="cursor: pointer;margin-left:20px" mat-raised-button color="warn" (click)="reject(user.USN)">Reject</button>
+                  </td>
+               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,88 @@
+*{
+    transition: 0.5s ease;
+}
+.nav{
+    top: 0;
+    position: relative;
+    width: 100%;
+    color: white;
+}
+
+.nav .right ul{
+    
+    display: inline-flex;
+    float: right;
+    right: 30px;
+    position: absolute;
+    /* margin: 10px 20px; */
+    
+}
+
+.nav ul li{
+    list-style: none; 
+    padding: 10px 20px;
+    margin: 10px 20px;
+}
+
+.banner{
+    background: linear-gradient(rgba(0, 0, 0, 0.651),rgba(0, 0, 0, 0.63),rgba(0, 0, 0, 0.692)), url("../../../assets/images/unnamed.jpg");
+    background-position: center;
+    width: 100%;
+    height: 300px;
+    background-size:cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    
+    /* background-attachment: fixed; */
+}
+
+.banner h1{
+    font-weight: bolder;
+    font-size: 60px;
+    text-shadow: 10px 0 20px black;
+}
+
+
+.cardbody{
+    width: 100%;
+    margin: 0 auto;
+
+}
+
+.lists{
+    display: flex;
+}
+.basicDetailsList1, .basicDetailsList2{
+    display: block;
+    list-style: none;
+    margin: 0px;
+    /* flex-wrap: wrap; */
+    /* justify-content:space-evenly; */
+}
+
+ul li{
+    margin: 15px 00px;
+    cursor:pointer;
+    white-space: nowrap;
+}
+
+
+
+
+
+@media only screen and (max-width: 600px){
+    /* .banner h1{
+        font-size: 30px;
+    } */
+
+    .banner{
+        height: 250px;
+    }
+
+    .banner h2{
+        font-size: 20px;
+    }
+}

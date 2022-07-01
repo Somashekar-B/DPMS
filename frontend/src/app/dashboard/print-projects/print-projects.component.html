@@ -1,0 +1,211 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content ">
+      <div class="header text-center">
+        <h1>Print Projects into Excel</h1>
+      </div>
+
+      <div class="userForm col-md-12 animate__animated animate__fadeIn">
+
+        <div class="msg" >
+          <span *ngIf="fail" class=" alert alert-danger text-center">Error occurred..! Please Check in <a routerLink="../view-projects">View Projects</a> with id {{proId}}</span>
+          <span *ngIf="success" class="alert alert-success text-center"> You have successfully registered a new project with ID {{proId}} </span>
+          <span *ngIf="deleteSuccess" class="alert alert-success text-center">Project Successfully Deleted </span>
+          <span *ngIf="deleteFail" class="alert alert-danger text-center">Error in deleting project</span>
+        </div>
+
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="col-md-12">
+
+          <div class="form-row col-lg-12">
+
+            <div class="form-group col-md-4">
+              <label for="year">Year</label>
+              <input
+                class="form-control col-lg-12"
+                type="number"
+                name="pyear"
+                placeholder="Ex: 2018"
+                formControlName="YEAR"
+              />
+              <small class="error" *ngIf="((year.touched && year.value.length==0) || (advSub && year.value.length==0)); else yearelse">Year Required</small>
+              <ng-template #yearelse>
+                <small class="error" *ngIf="(year.touched && year.invalid)">Year is invalid</small>
+              </ng-template>
+              </div>
+
+            <div class="form-group col-md-5">
+              <label for="department">Department</label>
+              <select class="form-control" name="pdepartment" formControlName="DEPARTMENT">
+                <option selected value="{{depCode}}">{{depName}}</option>
+              </select>
+            </div>
+
+
+            <div class="form-group col-md-4">
+              <label for="level">Project Level</label>
+              <select class="form-control" name="level" #lev (change)="getTypes(level.value)" formControlName="LEVEL">
+                <option value=""  selected disabled>--Select specific level--</option>
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+              </select>
+              <small class="error" *ngIf="((level.touched && level.value.length==0) || (advSub && level.value.length==0))">Level required</small>
+            </div>
+
+            <!-- <div class="form-group col-md-4">
+              <label for="type">Project Type</label>
+              <select class="form-control" name="ptype" formControlName="PRO_TYPE" #type >
+                <option value="" disabled selected>--Select Specific Type--</option>
+                <option *ngFor="let ty of showTypes; let i=index"  [value]="i">i</option>
+              </select>
+              <small class="error" *ngIf="((type.touched && type.value.length==0) || (advSub && type.value.length==0))">TYpe required</small>
+            </div> -->
+
+            <div class="form-group col-md-4">
+
+              <label for="ptype">Project Type</label>
+              <select class="form-control" name="ptype" formControlName="PRO_TYPE" #type>
+                <option value="" disabled selected>--Select Specific Type--</option>
+                <option *ngFor="let typ of showTypes; let i=index" [value]="typ.TYPE_CODE">{{typ.TYPE_NAME}}</option>
+              </select>
+              <small class="error" *ngIf="((type.touched && type.value.length==0) || (advSub && type.value.length==0))">TYpe required</small>
+            </div>
+
+
+            <div class="col-lg-3 form-group ">
+              <label for="semester">Semester</label>
+              <input
+                class="form-control"
+                type="number"
+                name="semester"
+                #semester
+                formControlName="SEMESTER"
+                />
+                <small class="error" *ngIf="((sem.touched && sem.value.length==0) || (advSub&& sem.value.length==0)); else semelse">semester required</small>
+                <ng-template #semelse>
+                  <small class="error" *ngIf="(sem.touched && sem.invalid )">Semester is invalid</small>
+                </ng-template>
+            </div>
+
+          <div class="col-lg-12 mt-2">
+            <button mat-raised-button [color]="(searchForm.valid) ? 'primary' : 'warn'" (click)="advSub = true" [type]="(searchForm.valid) ? 'submit' : 'button'" class="submit">Submit</button>
+          </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="m-1 animate__animated animate__fadeIn col-lg-12" *ngIf="found">
+        <div class="msg">
+          <h6 *ngIf="fail" class="text-danger">Error in Downloading file try again</h6>
+        <span *ngIf="notuploaded" class="alert alert-danger text-center">File not uploaded yet</span>
+        <span *ngIf="notfound" class="alert alert-danger text-center">Cannot open file</span>
+        </div>
+        <div class="found">
+          <h6 class="text-info mb-3">{{requiredProjects.length}} Matching Projects Found</h6>
+          <button class="btn btn-success ml-4 mb-4" (click)="printFile()">Print</button>
+        </div>
+        <table *ngIf="projects" class="table table-striped table-bordered table-hover" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <thead>
+            <tr>
+              <th>Project ID</th>
+              <th>Title</th>
+              <!-- <th>Department</th> -->
+              <th>Level</th>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Type</th>
+              <th>Batch</th>
+              <th>Guide</th>
+              <th>Synopsis</th>
+              <th>Report</th>
+              <th>PPT</th>
+              <th>Students</th>
+              <th>Technologies</th>
+              <th>Modified By</th>
+              <th>Created On</th>
+              <th>Modified On</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pro of requiredProjects; let i=index;">
+              <td>{{pro.PRO_ID}}</td>
+              <td>{{pro.PRO_TITLE}}</td>
+              <!-- <td>{{pro.DEPARTMENT}}</td> -->
+              <td>{{pro.LEVEL}}</td>
+              <td>{{pro.YEAR}}</td>
+              <td>{{pro.SEMESTER}}</td>
+              <td>{{pro.PRO_TYPE}}</td>
+              <td>{{pro.BATCH}}</td>
+              <td>{{pro.GUIDE}}</td>
+              <td><span class="text-info" (click)="viewSynopsis(i)" style="cursor: pointer;">Synopsis</span><br>
+                <p>Display Synopsis<mat-icon *ngIf="pro.DIS_SYNOPSIS" class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_SYNOPSIS" class="red">clear</mat-icon></p>
+              </td>
+              <td><span class="text-info" (click)="viewReport(i)" style="cursor: pointer;">Report</span><br>
+                <p>Display Report<mat-icon *ngIf="pro.DIS_REPORT"  class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_REPORT" class="red">clear</mat-icon></p>
+              </td>
+              <td><span class="text-info" (click)="viewPpt(i)" style="cursor: pointer;">PPT</span><br>
+                <p>Display PPT<mat-icon *ngIf="pro.DIS_PPT"  class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_PPT" class="red">clear</mat-icon></p>
+              </td>
+
+              <td>
+                <tr *ngFor="let stu of pro.students">
+                  <td>{{stu.USN}},</td>
+                </tr>
+              </td>
+              <td>
+                <tr *ngFor="let tech of pro.technologies">
+                  <td>{{tech.TECHNOLOGY}},</td>
+                </tr>
+              </td>
+              <td>{{pro.MODIFIED_BY}}</td>
+              <td>{{pro.CREATED_AT | date}}</td>
+              <td>{{pro.UPDATED_AT | date}}</td>
+
+              <td class="ops">
+                <!-- <ul>
+                  <li><mat-icon color="primary">preview</mat-icon></li>
+                  <li><mat-icon >edit</mat-icon></li>
+                  <li data-toggle="modal" data-target="#{{pro.PRO_ID}}"><mat-icon color="warn">delete</mat-icon></li>
+                </ul> -->
+                <a [routerLink]="['../project-details', pro.PRO_ID]" title="Preview project and edit"><mat-icon color="primary">visibility</mat-icon></a>
+                <!-- <a data-toggle="modal" style="cursor: pointer;" [attr.data-target]="'#section'+i"><mat-icon color="warn">delete</mat-icon></a> -->
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-success ml-4" (click)="printFile()">Print</button>
+      </div>
+
+      <h6 *ngIf="notfound" class="text-danger ml-5">*No projects found for this configuaration please check all the fields</h6>
+
+    </div>
+<!-- 
+    <div *ngFor="let pro of requiredProjects; let i=index;">
+      <div class="modal fade" [id]="'section' + i" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{pro.PRO_ID}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6>Are you sure you want to delete project - {{pro.PRO_TITLE}}</h6>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+              <button type="button" class="btn btn-danger"  data-dismiss="modal" (click)="deleteProject(pro.PRO_ID)">Yes Delete!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div> -->
+   
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="container1">
+    <div class="nav">    
+        <div class="right">
+            <ul>
+                <li routerLink="../forget-password">Reset Password</li>
+                <li (click)="logout()">Logout</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="banner">
+        <h1>All Projects Are Here</h1>
+    </div>
+
+    <div class="container">
+        <div class="subnav">
+            <ul>
+                <li *ngIf="myProjects==false" (click)="getStudentProjects()" style="cursor: pointer;">My Projects</li>
+                <li *ngIf="myProjects==true" (click)="getAllProjects()" style="cursor: pointer;">All Projects</li>
+                <li style="right:0; position: absolute;"> 
+                    <div class="input-group mb-3" >
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1"> <mat-icon>search</mat-icon> </span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search" (keyup)="search($event)" aria-describedby="basic-addon1">
+                      </div>
+            </ul>
+
+            <p class="text-center" style="background-color: black;color:white; padding:5px; width:100%; margin: 0 auto;">{{filteredProjects}} of {{totalProjects}} Projects</p>
+        </div>
+        <div class="cardbody">
+            <div class="cards" *ngFor="let pro of allProjects" [routerLink]="['../project', pro.PRO_ID]">
+                <h3>{{pro.PRO_ID}} - {{pro.PRO_TITLE}}</h3>
+                <hr>
+                <table class="table table-borderless">
+                    <tr>
+                        <td>{{pro.LEVEL}} Project</td>
+                        <td>Year: {{pro.YEAR}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{pro.PRO_TYPE}} Project</td>
+                        <td>Guided By: {{pro.GUIDE}}</td>
+                    </tr>
+                </table>
+                <a [routerLink]="['../project', pro.PRO_ID]" style="float: right;padding: 10px;">See More-->></a>
+            </div>
+            
+        </div>
+    </div>
+
+
+</div>

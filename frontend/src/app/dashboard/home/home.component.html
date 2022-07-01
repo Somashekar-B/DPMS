@@ -1,0 +1,41 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content">
+      <div class="header" align="center">
+        <h1>Welcome {{user.NAME}}</h1>
+        <p>Now you are back in control</p>
+      </div>
+      <div class="contentBody animate__animated animate__fadeIn">
+        <h2 style="font-weight: 300;">Department Projects Survey</h2>
+        <hr>
+        <div class="tabs">
+          <div class="projects">
+            <h4>{{projectsCount}}</h4>
+            <h3>Projects</h3>
+          </div>
+          <h1 style="font-weight: bolder; color: rgb(0, 65, 187); font-size: 30px;">By</h1>
+          <div class="students">
+            <h4>{{studentsCount}}</h4>
+            <h3>Students</h3>
+          </div>
+        </div>
+        <h2 style="font-weight: 100; color: rgb(0, 0, 0); font-size: 25px;">Under The Guidance Of</h2>
+        <div class="tabs2">
+
+          <div class="faculty">
+            <h4>{{facultyCount}}</h4>
+            <h3>Faculty</h3>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,58 @@
+.header{
+  display: block;
+  padding: 50px ;
+  justify-content: center;
+  background: linear-gradient(rgb(110, 48, 255),rgb(76, 195, 224));
+  /* background: linear-gradient(rgb(255, 102, 0),rgb(255, 196, 0)); */
+  border-radius: 0 0 70% 70%;
+  margin-bottom:10px;
+}
+
+mat-icon{
+  margin-right:5px;
+  position: relative;
+}
+
+.userForm{
+
+  justify-self: center;
+  align-items: center;
+  margin-top: 50px;
+
+}
+
+.userForm form{
+  font-size:15px;
+  width: 80%;
+  /* justify-items: center; */
+  margin-top: 30px;
+  margin-left: 10%;
+  margin-right: 15%;
+}
+
+.userForm form .submit{
+  margin: 30px;
+  text-align: center;
+  justify-self: center ;
+}
+
+.error{
+  color: red;
+}
+
+.form-item{
+  margin-bottom: 7px;
+}
+
+.form-item ul li{
+  font-size: 12px;
+}
+
+.msg{
+  display: flex;
+  justify-content: center;
+}
+
+/* mat-label{
+  font-size: 20px;
+} */

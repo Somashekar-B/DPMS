@@ -1,0 +1,139 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content">
+      <div class="header text-center">
+        <h1 *ngIf="user.USERTYPE=='Admin'">All your department projects are here</h1>
+        <h1 *ngIf="user.USERTYPE=='Faculty'">All projects under you are here</h1>
+      </div>
+      <div class="msg">
+        <span *ngIf="success" class="alert alert-success text-center">Project Deleted Succesfully..!</span>
+        <span *ngIf="fail" class="alert alert-danger text-center">Deletion failed.. Please try again..!!</span>
+        <span *ngIf="notuploaded" class="alert alert-danger text-center">File not uploaded yet</span>
+        <span *ngIf="notfound" class="alert alert-danger text-center">Cannot open file</span>
+      </div>
+
+      <div style="margin: 40px;">
+        <button *ngIf="user.USERTYPE=='Admin'" mat-raised-button color="primary" (click)="all()" [disabled]="allShown" style="margin-right: 30px;">All Projects</button>
+        <button *ngIf="user.USERTYPE=='Admin'" mat-raised-button color="warn" (click)="only()" [disabled]="!allShown">My Projects</button>
+      </div>
+
+      <div class="m-1 animate__animated animate__fadeIn">
+        <table *ngIf="projects" class="table table-striped table-bordered table-hover" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <thead>
+            <tr>
+              <th>Sl No.</th>
+              <th>Project ID</th>
+              <th>Title</th>
+              <!-- <th>Department</th> -->
+              <th>Level</th>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Type</th>
+              <th>Batch</th>
+              <th>Guide</th>
+              <th>Synopsis</th>
+              <th>Report</th>
+              <th>PPT</th>
+              <th>Students</th>
+              <th>Technologies</th>
+              <th>Modified By</th>
+              <th>Created On</th>
+              <th>Modified On</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pro of projects; let i=index;">
+              <td>{{i+1}}</td>
+              <td>{{pro.PRO_ID}}</td>
+              <td>{{pro.PRO_TITLE}}</td>
+              <!-- <td>{{pro.DEPARTMENT}}</td> -->
+              <td>{{pro.LEVEL}}</td>
+              <td>{{pro.YEAR}}</td>
+              <td>{{pro.SEMESTER}}</td>
+              <td>{{pro.PRO_TYPE}}</td>
+              <td>{{pro.BATCH}}</td>
+              <td>{{pro.GUIDE}}</td>
+              <td>
+                <!-- <a [href]="synopsisUrl" target="iframe_a" (click)="viewSynopsis(i)">Synopsis</a> -->
+                <span class="text-info" (click)="viewSynopsis(i)" style="cursor: pointer;">Synopsis</span>
+                <br>
+                <p>Display Synopsis<mat-icon *ngIf="pro.DIS_SYNOPSIS" class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_SYNOPSIS" class="red">clear</mat-icon></p>
+              </td>
+              <td>
+                <!-- <a [href]="reportUrl" target="iframe_a" (click)="viewReport(i)">Synopsis</a> -->
+                <span class="text-info" (click)="viewReport(i)" style="cursor: pointer;">Report</span>
+                <br>
+                <p>Display Report<mat-icon *ngIf="pro.DIS_REPORT"  class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_REPORT" class="red">clear</mat-icon></p>
+              </td>
+              <td>
+                <!-- <a [href]="pptUrl" target="iframe_a" (click)="viewPpt(i)">Synopsis</a> -->
+                <span class="text-info" (click)="viewPpt(i)" style="cursor: pointer;">PPT</span>
+                <br>
+                <p>Display PPT<mat-icon *ngIf="pro.DIS_PPT"  class="green">done</mat-icon><mat-icon *ngIf="!pro.DIS_PPT" class="red">clear</mat-icon></p>
+              </td>
+              <td>
+                <tr *ngFor="let stu of pro.students">
+                  <td>{{stu.USN}}</td>
+                </tr>
+              </td>
+              <td>
+                <tr *ngFor="let tech of pro.technologies">
+                  <td>{{tech.TECHNOLOGY}}</td>
+                </tr>
+              </td>
+              <td>{{pro.MODIFIED_BY}}</td>
+              <td>{{pro.CREATED_AT | date}}</td>
+              <td>{{pro.UPDATED_AT | date}}</td>
+
+              <td class="ops">
+                <!-- <ul>
+                  <li><mat-icon color="primary">preview</mat-icon></li>
+                  <li><mat-icon >edit</mat-icon></li>
+                  <li data-toggle="modal" data-target="#{{pro.PRO_ID}}"><mat-icon color="warn">delete</mat-icon></li>
+                </ul> -->
+                <a [routerLink]="['../project-details', pro.PRO_ID]" title="Preview project and edit"><mat-icon color="primary">visibility</mat-icon></a>
+                <a data-toggle="modal" style="cursor: pointer;" [attr.data-target]="'#section'+i"><mat-icon color="warn">delete</mat-icon></a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- <pdf-viewer
+              [src]="pdfSrc"
+              [render-text]="true"
+              style="display: block;"
+            >
+            </pdf-viewer> -->
+
+    <div *ngFor="let pro of projects; let i=index;">
+      <div class="modal fade" id="{{'section' + i}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{pro.PRO_ID}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6>Are you sure you want to delete project - {{pro.PRO_TITLE}}</h6>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+              <button type="button" class="btn btn-danger"  data-dismiss="modal" (click)="deleteProject((pro.PRO_ID))">Yes Delete!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+
+</div>

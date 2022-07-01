@@ -1,0 +1,359 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content ">
+      <div class="header text-center">
+        <h1>Register New Project</h1>
+      </div>
+
+      <div class="userForm col-md-12 animate__animated animate__fadeIn">
+
+        <div class="msg" >
+          <span *ngIf="fail" class=" alert alert-danger text-center">Error occurred..! Please Check in <a routerLink="../view-projects">View Projects</a> with id {{proId}}</span>
+          <span *ngIf="success" class="alert alert-success text-center"> You have successfully registered a new project with ID {{proId}} </span>
+          <span *ngIf="exist" class="alert alert-danger text-center">Project already exists or please verify all the fields correctly</span>
+        </div>
+
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="col-md-12" enctype="multipart/form-data">
+
+          <div class="form-row col-lg-12">
+
+            <div class="form-group col-md-12">
+              <label for="year">Year *</label>
+              <input
+                class="form-control col-lg-3"
+                type="number"
+                name="pyear"
+                placeholder="Ex: 2018"
+                formControlName="year"
+              />
+              <small class="error" *ngIf="((yr.touched && yr.value.length==0) || (advSub && yr.value.length==0)); else yearelse">Year Required</small>
+              <ng-template #yearelse>
+                <small class="error" *ngIf="(yr.touched && yr.invalid)">Year is invalid</small>
+              </ng-template>
+              </div>
+
+            <div class="form-group col-md-12">
+              <label for="ptitle">Project Title </label>
+              <input
+                class="form-control"
+                type="text"
+                name="ptitle"
+                formControlName="proTitle"
+                placeholder="Enter Project Title"
+                />
+
+                <small class="error" *ngIf="( proTitle.touched && proTitle.invalid )">Project Title is invalid</small>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="department">Department *</label>
+              <select class="form-control" name="pdepartment" formControlName="department">
+                <option value="{{depCode}}">{{depName}}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="level">Project Level *</label>
+              <select class="form-control" name="level" #level (change)="getTypes(level.value)" formControlName="level">
+                <option value="" selected disabled>--Select specific level--</option>
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+              </select>
+              <small class="error" *ngIf="((level.touched && level.value.length==0) || (advSub && level.value.length==0))">Level required</small>
+            </div>
+
+            <div class="form-group col-md-4">
+
+              <label for="type">Project Type *</label>
+              <select class="form-control" name="ptype" formControlName="type" #type (change)="batchRequire(type.value, level.value)">
+                <option value="" disabled selected>--Select Specific Type--</option>
+                <option *ngFor="let typ of showTypes" value="{{typ.TYPE_CODE}}">{{typ.TYPE_NAME}}</option>
+              </select>
+              <small class="error" *ngIf="((type.touched && type.value.length==0) || (advSub && type.value.length==0))">TYpe required</small>
+            </div>
+
+
+            <div class="col-lg-3 form-group ">
+              <label for="semester">Semester *</label>
+              <input
+                class="form-control"
+                type="number"
+                name="semester"
+                #semester
+                formControlName="semester"
+                />
+                <small class="error" *ngIf="((semester.touched && semester.value.length==0) || (advSub&& semester.value.length==0)); else semelse">Semester required</small>
+                <ng-template #semelse>
+                  <small class="error" *ngIf="(semester.touched && semester.invalid )">Semester is invalid</small>
+                </ng-template>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="batch">Batch *</label>
+              <input
+                class="form-control"
+                type="text"
+                name="batch"
+                placeholder="Ex: B11"
+                formControlName="batch"
+              />
+                <small class="error" *ngIf="(( batch.touched && batch.value.length==0) || (advSub && batch.value.length==0)); else batchelse">Batch required</small>
+                <ng-template #batchelse>
+                  <small class="error" *ngIf="( batch.touched && batch.invalid )">Batch is invalid</small>
+                </ng-template>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="guide">Guided By</label>
+              <h5 *ngIf="user.USERTYPE==='Faculty'">{{user.NAME}}</h5>
+                <select name="guide" class="form-control" formControlName="guide" *ngIf="user.USERTYPE==='Admin'">
+                  <option *ngFor="let guide of allUsers"  [value]="guide.NAME">{{guide.NAME}}</option>
+                </select>
+                <small class="error" *ngIf="(( guide.touched && guide.value.length==0) || (advSub && guide.value.length==0)); else guideelse">Guide name required</small>
+                <ng-template #guideelse>
+                  <small class="error" *ngIf="( guide.touched && guide.invalid )">Guide name is invalid</small>
+                </ng-template>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group col-md-12">
+                <label for="synopsis">Synopsis
+                </label>
+                <input
+                  class="form-control-file col-lg-12"
+                  type="file"
+                  name="SYNOPSIS"
+                  #synopsis
+
+                  (change)="onSynopsisSelect($event)"
+                  />
+                  <small class="error" *ngIf="( synopsis.touched && synopsis.value.length==0)">Synopsis required</small>
+                  <ng-template #yearelse>
+                    <small class="error" *ngIf="( synopsis.touched && synopsis.invalid )">is invalid</small>
+                  </ng-template>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #disSynopsis
+                  name="dis_synopsis"
+                  formControlName="dis_synopsis"
+                />
+                <label for="dis_synopsis" class="form-check-label">Display Synopsis for users</label>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group col-md-12">
+                <label for="report"> Report
+                </label>
+                <input
+                  class="form-control-file"
+                  type="file"
+                  name="REPORT"
+                  #report
+
+                  placeholder="Choose Report File"
+                  (change)="onReportSelect($event)"
+                />
+                  <small class="error" *ngIf="( report.touched && report.value.length==0)">required</small>
+                  <ng-template #yearelse>
+                    <small class="error" *ngIf="( report.touched && report.invalid )">is invalid</small>
+                  </ng-template>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #disReport
+                  name="dis_report"
+                  formControlName="dis_report"
+                />
+                <label for="dis_report" class="form-check-label">Display Report for users</label>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group col-md-12">
+                <label for="report"> PPT
+                </label>
+                <input
+                  class="form-control-file"
+                  type="file"
+                  name="PPT"
+                  #ppt
+
+                  placeholder="Choose ppt File"
+                  (change)="onPptSelect($event)"
+                />
+                  <small class="error" *ngIf="( ppt.touched && ppt.value.length==0)">required</small>
+                  <ng-template #yearelse>
+                    <small class="error" *ngIf="( ppt.touched && ppt.invalid )">is invalid</small>
+                  </ng-template>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #disppt
+                  name="dis_ppt"
+                  formControlName="dis_ppt"
+                />
+                <label for="dis_ppt" class="form-check-label">Display PPT for users</label>
+              </div>
+            <h6 class="text-danger">* Please upload files of only PDF Format</h6>
+
+            </div>
+
+
+            <div class="techs mt-5 col-lg-12 row" formArrayName="technologies">
+              <h4 class="col-lg-12">Add technologies Used</h4>
+              <div class="indiTech col-lg-4 row mt-3"  *ngFor="let indiTech of technologies.controls; let i=index">
+                <div class="col-lg-9">
+                  <h6 style="color:green">Technology {{i+1}} *</h6>
+                  <input
+                    type="text"
+                    name="tech{{i}}"
+                    list="techs"
+                    #tech{{i}}
+                    class="form-control"
+                    [formControlName]="i"
+                    />
+                    <!-- <select name="tech{{i}}"
+                    list="techs"
+                    #tech{{i}}
+                    class="form-control"
+                    [formControlName]="i">
+                    <option class="form-control"  *ngFor="let tec of allTechs" [value]="tec.technology">{{tec.technology}}</option>
+                  </select> -->
+                </div>
+
+                <div class="col-lg-1 form-group">
+                  <label for="remove" *ngIf="i" >______</label><br>
+                  <span class="btn btn-danger text-center" name="remove" type="button"  (click)="removeTech(i)">X</span>
+                </div>
+                <small *ngIf="indiTech.invalid" class="error">Technology Required</small>
+              </div>
+            </div>
+
+            <div class="col-lg-12 mt-4">
+              <p class="text-info">*Delete unused extra fields it will be invalid</p>
+              <button class="btn btn-primary" type="button" (click)="addTech()">One more Tech</button>
+            </div>
+
+            <datalist id="techs">
+              <option *ngFor="let tec of allTechs" value="{{tec.technology}}"></option>
+            </datalist>
+
+    <hr>
+
+            <div class="students mt-5 " >
+              <h4>Add students details</h4><br>
+              <div formArrayName="students" *ngFor="let indiStud of students.controls; let i=index;">
+                <div class="indiStud" [formGroupName]="i">
+                  <h6 [ngStyle]="{'color': 'blue'}" class="mt-2">Student {{i+1}}</h6>
+                  <div class="form-row">
+                    <div class="col-lg-2 form-group">
+                      <label [for]="'usn'+i">USN *</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        (keyup)="fillStudent(i)"
+                        [name]="'usn'+i"
+                        [id]="'usn'+i"
+                        formControlName="USN"
+                        />
+
+                        <small class="error" *ngIf="((indiStud.get('USN').touched && indiStud.get('USN').value.length==0) || ( advSub && indiStud.get('USN').value.length==0)); else usnelse">USN required</small>
+                        <ng-template #usnelse>
+                        <small class="error" *ngIf="(indiStud.get('USN').invalid && indiStud.get('USN').touched)">USN Invalid</small>
+                        </ng-template>
+                    </div>
+
+                    <div class="col-lg-2 form-group ">
+                      <label [for]="'name'+i">Name</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        [name]="'name'+i"
+                        formControlName="NAME"
+                      />
+                      <small class="error" *ngIf="((indiStud.get('NAME').touched && indiStud.get('NAME').value.length==0) || ( advSub && indiStud.get('NAME').value.length==0)); else NAMEelse">Name required</small>
+                        <ng-template #NAMEelse>
+                        <small class="error" *ngIf="(indiStud.get('NAME').invalid && indiStud.get('NAME').touched)">Name Invalid</small>
+                        </ng-template>
+                    </div>
+
+                    <div class="col-lg-2 form-group ">
+                      <label [for]="'mobile_no'+i">Mobile Number</label>
+                      <input
+                        class="form-control"
+                        type="number"
+                        [id]="'mobile_no'+i"
+                        #mob{{i}}
+                        [name]="'mobile_no'+i"
+                        formControlName="MOBILE_NO"
+                         />
+
+                          <small class="error" *ngIf="((indiStud.get('MOBILE_NO').invalid && indiStud.get('MOBILE_NO').touched)||(indiStud.get('MOBILE_NO').invalid && advSub))">Mobile number Invalid</small>
+
+                    </div>
+
+                    <div class="col-lg-2 form-group ">
+                      <label [for]="'email'+i">Email</label>
+                      <input
+                        class="form-control"
+                        type="email"
+                        #email{{i}}
+                        [id]="'email'+i"
+                        [name]="'email'+i"
+                        formControlName="EMAIL"
+                        />
+                        <small class="error" *ngIf="(indiStud.get('EMAIL').invalid && indiStud.get('EMAIL').touched)">Email Invalid</small>
+                    </div>
+
+                    <div class="col-lg-2 form-group ">
+                      <label [for]="'ab'+i">Academic Batch</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        #ab{{i}}
+                        [id]="'ab'+i"
+                        [name]="'ab'+i"
+                        formControlName="ACADEMIC_BATCH"
+                        />
+                        <small class="error" *ngIf="(indiStud.get('ACADEMIC_BATCH').invalid && indiStud.get('ACADEMIC_BATCH').touched)">Academic Batch Invalid</small>
+                    </div>
+
+                    <div class="col-lg-1 form-group">
+                      <label for="remove" *ngIf="i">Remove</label><br>
+                      <span class="btn btn-danger text-center" name="remove" type="button" (click)="removeForm(i)">X</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          <div class="col-lg-12 mt-2">
+            <p class="text-info">*Delete Unused student forms it may solve errors</p>
+            <h6 class="text-danger">* fields are required</h6>
+
+            <button class="btn btn-primary" type="button" (click)="addStudent()">One more student</button>
+            <button mat-raised-button [color]="(projectForm.valid) ? 'primary' : 'warn'" (click)="makeTrue()" [type]="(projectForm.valid) ? 'submit' : 'button'" class="submit">Submit</button>
+          </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

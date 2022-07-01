@@ -1,0 +1,531 @@
+
+  <div class="body">
+
+      <div class="header text-center">
+        <h1>{{project[0].PRO_TITLE}}</h1>
+      </div>
+
+      <div class="msg">
+        <span *ngIf="success" class="alert alert-success text-center">Project Updated Succesfully..!</span>
+        <span *ngIf="fail" class="alert alert-danger text-center">Updation failed.. Please try again now..!!</span>
+        <span *ngIf="notfound" class="alert alert-danger text-center">Unable to open file</span>
+      </div>
+
+      <div class="content  p-5">
+        <button class="btn btn-dark float-right" (click)="returnBack()">Back</button>
+        <div class="head">
+          <h3>Basic Details</h3>
+          <hr>
+          <table class="table-sm">
+            <tr>
+              <td><b>Project ID : </b></td>
+              <td>{{project[0].PRO_ID}}</td>
+            </tr>
+            <tr>
+              <td><b>Project Name : </b></td>
+              <td>{{project[0].PRO_TITLE}}</td>
+            </tr>
+            <tr>
+              <td><b>Department : </b></td>
+              <td>{{project[0].DEPARTMENT}}</td>
+            </tr>
+            <tr>
+              <td><b>Project level : </b></td>
+              <td>{{project[0].LEVEL}}</td>
+            </tr>
+            <tr>
+              <td><b>Project type : </b></td>
+              <td>{{project[0].PRO_TYPE}}</td>
+            </tr>
+            <tr>
+              <td><b>Semester : </b></td>
+              <td>{{project[0].SEMESTER}}</td>
+            </tr>
+            <tr>
+              <td><b>Batch : </b></td>
+              <td>{{project[0].BATCH}}</td>
+            </tr>
+            <tr>
+              <td><b>Guided By : </b></td>
+              <td>{{project[0].GUIDE}}</td>
+            </tr>
+          </table>
+          <button class="btn btn-success float-right" data-toggle="modal" [attr.data-target]="'#basicFormDetails'" (click)="basicFormSetValue()">Edit basic details</button>
+        </div>
+        <br>
+        <hr>
+
+        <div class="reviews">
+          <h3>Reviews</h3>
+          <hr>
+          <ul>
+            <li *ngFor="let review of reviews"><b>{{review.LABEL}} : </b>{{review.DESCRIPTION}}</li>
+          </ul>
+          <button class="btn btn-success float-right" (click)="updateReview()">Edit Reviews</button>
+        </div>
+        <br>
+        <hr>
+
+        <div class="docs">
+          <h3>Documents</h3><hr>
+          <button class="btn btn-primary m-2" (click)="viewSynopsis()" [disabled]="disableSynopsis">Synopsis</button>
+          <button class="btn btn-primary m-2" (click)="viewReport()" [disabled]="disableReport">Report</button>
+          <button class="btn btn-primary" (click)="viewPpt()" [disabled]="disablePpt">Presentation</button><br>
+          <button class="btn btn-success float-right" data-toggle="modal" [attr.data-target]="'#documentForm'" (click)="docsFormSetValue()">Edit Documents</button>
+        </div>
+        <br>
+        <hr>
+
+        <div class="techs">
+          <h3>Technologies used</h3><hr>
+          <div *ngFor="let tech of project[0].technologies">
+            <p>{{tech.TECHNOLOGY}}</p>
+          </div>
+          <button class="btn btn-success float-right" data-toggle="modal" [attr.data-target]="'#techForm'" (click)="techFormSetValue()">Edit Technologies</button>
+        </div>
+        <br>
+        <hr>
+
+        <div class="students">
+          <h3>Students Details</h3><hr>
+          <table class="table table-borderless table-responsive-lg">
+            <thead>
+              <th>Name</th>
+              <th>USN</th>
+              <th>Mobile No</th>
+              <th>Email ID</th>
+              <th>Academic Batch</th>
+            </thead>
+            <tr *ngFor="let stu of project[0].students; let i=index; ">
+              <td>{{stu.NAME}}</td>
+              <td>{{stu.USN}}</td>
+              <td>{{stu.MOBILE_NO}}</td>
+              <td>{{stu.EMAIL}}</td>
+              <td>{{stu.ACADEMIC_BATCH}}</td>
+            </tr>
+          </table>
+          <span *ngIf="duplicate" class="text-danger">U cannot have duplicate entries for students</span>
+          <button class="btn btn-success float-right" data-toggle="modal" [attr.data-target]="'#studentForm'" (click)="studentsFormSetValue()">Edit Student Details</button>
+        </div>
+        <br>
+
+        <button class="btn btn-success text-center" (click)="onSubmit()">Save Changes</button>
+        <button class="btn btn-dark ml-4 " (click)="returnBack()">Back</button>
+      </div>
+
+
+        <div class="modal fade" id="basicFormDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Basic Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="basicForm"  class="col-md-12">
+
+                <div class="form-row col-lg-12">
+
+                  <div class="form-group col-md-12">
+                    <label for="year">Year</label>
+                    <input
+                      class="form-control col-lg-6"
+                      type="number"
+                      name="pyear"
+                      placeholder="Ex: 2018"
+                      formControlName="YEAR"
+                    />
+                    <small class="error" *ngIf="(year.touched && (year.value.length==0) || (year.value.length==0 && basicInavlid)); else yearelse">Year Required</small>
+                    <ng-template #yearelse>
+                      <small class="error" *ngIf="(year.touched && year.invalid)">Year is invalid</small>
+                    </ng-template>
+                    </div>
+
+                  <div class="form-group col-md-12">
+                    <label for="ptitle">Project Title</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="ptitle"
+                      formControlName="PRO_TITLE"
+                      placeholder="Enter Project Title"
+                      />
+                    <small class="error" *ngIf="((proTitle.touched && proTitle.value.length==0)||(basicInavlid && proTitle.value.length==0) ); else titleelse">Project Title required</small>
+                    <ng-template #titleelse>
+                      <small class="error" *ngIf="( proTitle.touched && proTitle.invalid )">Project Title is invalid</small>
+                    </ng-template>
+                  </div>
+
+
+                  <div class="form-group col-md-12">
+                    <label for="department">Department</label>
+                    <select class="form-control" name="pdepartment" formControlName="DEPARTMENT">
+                      <!-- <option value="">--Select the Depatment--</option> -->
+                      <option value="CS">Computer science</option>
+                      <!-- <option value="EC">Electronics and Communication</option> -->
+                    </select>
+                    <small class="error" *ngIf="(( department.touched && department.value.length==0)||( basicInavlid && department.value.length==0))">Department required</small>
+                  </div>
+
+
+                  <div class="form-group col-md-12">
+                    <label for="level">Project Level</label>
+                    <select class="form-control" name="level" #level (change)="getTypes(level.value)" formControlName="LEVEL">
+                      <option value="">--Select specific level--</option>
+                      <option value="UG">UG</option>
+                      <option value="PG">PG</option>
+                    </select>
+                    <small class="error" *ngIf="((level.touched && level.value.length==0)||(basicInavlid && level.value.length==0))">Level required</small>
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <label for="type">Project Type</label>
+                    <select class="form-control" name="ptype" formControlName="PRO_TYPE" #type (change)="batchRequire(type.value, level.value)">
+                      <option value="" disabled selected>--Select Specific Type--</option>
+                      <option *ngFor="let typ of showTypes" value="{{typ.TYPE_CODE}}">{{typ.TYPE_NAME}}</option>
+                    </select>
+                    <small class="error" *ngIf="((type.touched && type.value.length==0)||(stuInvalid && type.value.length==0))">TYpe required</small>
+                  </div>
+
+
+                  <div class="col-lg-6 form-group ">
+                    <label for="semester">Semester</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      name="semester"
+                      #semester
+                      formControlName="SEMESTER"
+                      />
+                      <small class="error" *ngIf="(( semester.touched && semester.value.length==0)||(basicInavlid && semester.value.length==0)); else semelse">Semester required</small>
+                      <ng-template #semelse>
+                        <small class="error" *ngIf="( semester.touched && semester.invalid )">Semester is invalid</small>
+                      </ng-template>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="batch">Batch</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="batch"
+                      placeholder="Ex: B11"
+                      formControlName="BATCH"
+                    />
+                      <small class="error" *ngIf="((batch.touched && batch.value.length==0)||(basicInavlid && batch.value.length==0)); else batchelse">Batch required</small>
+                      <ng-template #batchelse>
+                        <small class="error" *ngIf="( batch.touched && batch.invalid )">Batch is invalid</small>
+                      </ng-template>
+                  </div>
+
+                  <!-- <div class="form-group col-md-12">
+                    <label for="guide">Guided By</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="guide"
+                      formControlName="GUIDE"
+                      placeholder="Specify the faculty name"
+                      />
+                      <small class="error" *ngIf="(( guide.touched && guide.value.length==0)||( basicInavlid && guide.value.length==0)); else guideelse">Guide name required</small>
+                      <ng-template #guideelse>
+                        <small class="error" *ngIf="( guide.touched && guide.invalid )">Guide name is invalid</small>
+                      </ng-template>
+                  </div> -->
+
+                  <div class="form-group col-md-6">
+                    <label for="guide">Guided By</label>
+                    <h5 *ngIf="user.USERTYPE==='Faculty'">{{user.NAME}}</h5>
+                      <select name="guide" class="form-control" formControlName="GUIDE" *ngIf="user.USERTYPE==='Admin'">
+                        <option *ngFor="let guide of allUsers"  [value]="guide.NAME">{{guide.NAME}}</option>
+                      </select>
+                      <small class="error" *ngIf="(( guide.touched && guide.value.length==0) || (basicInavlid && guide.value.length==0)); else guideelse">Guide name required</small>
+                      <ng-template #guideelse>
+                        <small class="error" *ngIf="( guide.touched && guide.invalid )">Guide name is invalid</small>
+                      </ng-template>
+                  </div>
+                  </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+              <button mat-raised-button [color]="(basicForm.valid) ? 'primary' : 'warn'" (click)="saveBasicDetails()" class="submit">Submit</button>
+              <!-- <button class="submit btn btn-success" [disabled]="basicForm.invalid" (click)="saveBasicDetails()">Submit</button> -->
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+        <div class="modal fade" id="documentForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Documents Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="documentsForm" class="col-md-12">
+
+            <div class="col-lg-12">
+              <div class="form-group col-md-12">
+                <label for="synopsis">Synopsis</label>
+                <input
+                  class="form-control-file col-lg-12"
+                  type="file"
+                  name="synopsis"
+                  (change)="onSynopsisSelect($event)"
+                  />
+                  <small *ngIf="SynopsisName">Present Synopsis: {{SynopsisName}}</small>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #disSynopsis
+                  name="dis_synopsis"
+                  formControlName="DIS_SYNOPSIS"
+                />
+                <label for="dis_synopsis" class="form-check-label">Display Synopsis for users</label>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-group col-md-12">
+                <label for="report"> Report</label>
+                <input
+                  class="form-control-file"
+                  type="file"
+                  name="report"
+                  (change)="onReportSelect($event)"
+                  placeholder="Choose Report File"
+                />
+                <small *ngIf="ReportName">Present Report: {{ReportName}}</small>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #disReport
+                  name="dis_report"
+                  formControlName="DIS_REPORT"
+                />
+                <label for="dis_report" class="form-check-label">Display Report for users</label>
+              </div>
+            </div>
+
+
+            <div class="col-lg-12">
+              <div class="form-group col-md-12">
+                <label for="report"> Presentation</label>
+                <input
+                  class="form-control-file"
+                  type="file"
+                  name="ppt"
+                  (change)="onPptSelect($event)"
+                  placeholder="Choose Presentation File"
+                />
+                <small *ngIf="PptName">Present PPT: {{PptName}}</small>
+              </div>
+
+              <div class="form-check form-group pl-4 col-lg-12">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  #dis_ppt
+                  name="dis_ppt"
+                  formControlName="DIS_PPT"
+                />
+                <label for="dis_report" class="form-check-label">Display Presentation for users</label>
+              </div>
+            </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button mat-raised-button [color]="(documentsForm.valid) ? 'primary' : 'warn'" (click)="saveDocs()" class="submit">Submit</button>
+              <!-- <button class="submit btn btn-success" [disabled]="documentsForm.invalid" (click)="saveDocs()">Submit</button> -->
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+        <div class="modal fade" id="techForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Technologies</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="technologyForm">
+                <div class="techs col-lg-12 row" formArrayName="technology">
+                  <h4 class="col-lg-12">Add technologies Used</h4>
+                  <div class="indiTech col-lg-12 row"  *ngFor="let indiTech of technologies.controls; let i=index">
+                    <div [formGroupName]="i">
+                      <div class="col-lg-12">
+                        <h6 style="color:green">Technology {{i+1}}</h6>
+                        <input
+                          type="text"
+                          name="tech{{i}}"
+                          list="techs"
+                          #tech{{i}}
+                          class="form-control"
+                          formControlName="TECHNOLOGY"
+                          />
+                          <small class="error" *ngIf="(((indiTech.touched) && (indiTech.value.length==0))|| (techInvalid  && (indiTech.value.length==0))); else techelse">Technology Required or delete the row</small>
+                          <ng-template #techelse>
+                            <small class="error" *ngIf="( (indiTech.touched) && (indiTech.invalid) )">Technology invalid</small>
+                          </ng-template>
+                      </div>
+                      <div class="col-lg-1 form-group">
+                        <label for="remove" *ngIf="i" >______</label><br>
+                        <span class="btn btn-danger text-center" name="remove" type="button"  (click)="removeTech(i)">X</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <datalist id="techs">
+                  <option *ngFor="let tec of allTechs" value="{{tec.TECHNOLOGY}}"></option>
+                </datalist>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" type="button" (click)="addTech()">One more Tech</button>
+              <button mat-raised-button [color]="(technologyForm.valid) ? 'primary' : 'warn'" (click)="saveTechs()" class="submit">Submit</button>
+              <!-- <button class="submit btn btn-success" [disabled]="technologyForm.invalid" (click)="saveTechs()">Submit</button> -->
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+        <div class="modal fade" id="studentForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Students details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="studentForm">
+                <div class="students mt-5 " >
+
+                  <div formArrayName="stus">
+                    <h4>Add students details</h4><br>
+                    <div *ngFor="let inStu of studs.controls; let i=index;">
+                      <div class="indiStud" [formGroupName]="i">
+                        <h6 style="color: blue;" class="mt-2">Student {{i+1}}</h6>
+                        <div class="form-row">
+                          <div class="col-lg-6 form-group">
+                            <label for="stuUSN{{i}}">USN</label>
+                            <input
+                              class="form-control"
+                              type="text"
+                              (keyup)="fillStudent(i)"
+                              name="stuUSN{{i}}"
+                              id="stuUSN{{i}}"
+                              formControlName="USN"
+                              />
+                              <!-- <small class="error" *ngIf="((indiStud.get('USN').value.length==0 && indiStud.get('USN').touched)||(indiStud.get('USN').value.length==0 && stuInvalid)); else usnelse">USN Required or delete the row</small>
+                              <ng-template #usnelse>
+                              <small class="error" *ngIf="(indiStud.get('USN').invalid && indiStud.get('USN').touched)">USN Invalid</small>
+                              </ng-template> -->
+                          </div>
+
+                          <div class="col-lg-6 form-group ">
+                            <label [for]="'name'+i">Name</label>
+                            <input
+                              class="form-control"
+                              type="text"
+                              [name]="'name'+i"
+                              formControlName="NAME"
+                            />
+                              <!-- <small class="error" *ngIf="((indiStud.get('NAME').value.length==0 && indiStud.get('NAME').touched)||(indiStud.get('NAME').value.length==0 && stuInvalid)); else usnelse">USN Required or delete the row</small>
+                              <ng-template #usnelse>
+                              <small class="error" *ngIf="(indiStud.get('NAME').invalid && indiStud.get('NAME').touched)">Name Invalid</small>
+                              </ng-template> -->
+                            </div>
+
+                          <div class="col-lg-3 form-group ">
+                            <label [for]="'mobile_no'+i">Mobile Number</label>
+                            <input
+                              class="form-control"
+                              type="number"
+                              [id]="'mobile_no'+i"
+                              #mob{{i}}
+                              [name]="'mobile_no'+i"
+                              formControlName="MOBILE_NO"
+                               />
+                              <!-- <small class="error" *ngIf="(indiStud.get('MOBILE_NO').invalid && indiStud.get('MOBILE_NO').touched)">Mobile Number Invalid</small> -->
+                          </div>
+
+                          <div class="col-lg-6 form-group ">
+                            <label [for]="'email'+i">Email</label>
+                            <input
+                              class="form-control"
+                              type="email"
+                              #email{{i}}
+                              [id]="'email'+i"
+                              [name]="'email'+i"
+                              formControlName="EMAIL"
+                              />
+                              <!-- <small class="error" *ngIf="(indiStud.get('EMAIL').invalid && indiStud.get('EMAIL').touched)">Email id Invalid</small> -->
+                          </div>
+
+                          <div class="col-lg-3 form-group ">
+                            <label [for]="'ab'+i">Academic Batch</label>
+                            <input
+                              class="form-control"
+                              type="text"
+                              #ab{{i}}
+                              [id]="'ab'+i"
+                              [name]="'ab'+i"
+                              formControlName="ACADEMIC_BATCH"
+                              />
+                              <!-- <small class="error" *ngIf="(indiStud.get('ACADEMIC_BATCH').invalid && indiStud.get('ACADEMIC_BATCH').touched)">Academic Batch Invalid</small> -->
+                          </div>
+
+                          <div class="col-lg-1 form-group">
+                            <label for="remove" *ngIf="i" >Remove</label><br>
+                            <span class="btn btn-danger text-center" name="remove" type="button" (click)="removeForm(i)">X</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary m-1" type="button" (click)="addStudent()">One more student</button>
+              <button mat-raised-button [color]="(studentForm.valid) ? 'primary' : 'warn'" (click)="saveStudents()" class="submit">Submit</button>
+              <!-- <button class="submit btn btn-success" [disabled]="studentForm.invalid" (click)="saveStudents()">Submit</button> -->
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+  </div>
+

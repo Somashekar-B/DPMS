@@ -1,0 +1,72 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content ">
+      <div class="header text-center">
+        <h1>All the types of projects referred by departments</h1>
+      </div>
+      <div class="msg">
+        <span *ngIf="success" class="alert alert-success text-center">Project Type deleted succesfully..!</span>
+        <span *ngIf="fail" class="alert alert-danger text-center">Deletion failed.. Please try again</span>
+      </div>
+      <div class="m-1 animate__animated animate__fadeIn">
+        <table  class="table table-striped table-bordered table-hover text-center" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <thead>
+            <tr>
+              <th>Sl.No</th>
+              <th>Department</th>
+              <th>Project Type</th>
+              <th>Type Code</th>
+              <th>Level</th>
+              <th>Semester</th>
+              <th>Has Batches</th>
+              <th *ngIf="user.USERTYPE=='Admin'">Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let type of projectsTypes; let i=index;">
+              <td>{{i+1}}</td>
+              <td>{{type.DEPARTMENT}}</td>
+              <td>{{type.TYPE_NAME}}</td>
+              <td>{{type.TYPE_CODE}}</td>
+              <td>{{type.LEVEL}}</td>
+              <td>{{type.SEMESTER}}</td>
+              <td *ngIf="type.AVAIL_BATCHES == 0">False</td>
+              <td *ngIf="type.AVAIL_BATCHES == 1">True</td>
+              <td class="ops" *ngIf="user.USERTYPE=='Admin'">
+                <a (click)="updateProjectType(i)"><mat-icon >edit</mat-icon></a>
+                <a data-toggle="modal" [attr.data-target]="'#section'+i" style="cursor: pointer"><mat-icon color="warn">delete</mat-icon></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngFor="let pro of projectsTypes; let i=index;">
+      <div class="modal fade" id="{{'section' + i}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{pro.LEVEL + " - " + pro.TYPE_CODE + " - " + pro.SEMESTER}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6>Are you sure you want to delete project Type - {{" " + pro.TYPE_NAME + " assigned for " + pro.LEVEL + " - " + pro.SEMESTER}}</h6>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+              <button type="button" class="btn btn-danger"  data-dismiss="modal" (click)="deleteProjectTypes((pro))">Yes Delete!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+  </div>
+</div>

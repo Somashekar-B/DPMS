@@ -1,0 +1,42 @@
+<div class="content ">
+  <div class="header text-center">
+    <h1>Welcome just Login and get Access</h1>
+  </div>
+  <!-- <mat-divider></mat-divider> -->
+  <div class="userForm animate__animated animate__fadeIn">
+    <div class="msg"><span *ngIf="success" class=" alert alert-success text-center">{{message}}</span>
+    <!-- <div class="msg"><span *ngIf="fail" class=" alert alert-danger text-center">{{message}}</span> -->
+    </div>
+    <form [formGroup]="userLogin" (ngSubmit)="submitData()" class="form-group col-lg-12 form">
+
+      <div class="col-lg-7 form-item">
+        <mat-form-field class="col-lg-12">
+          <mat-label><mat-icon class="mat-18">account_circle</mat-icon>Username/Email Id</mat-label>
+          <input matInput  type="text" name="username" formControlName="username" placeholder="Enter Username/Registered Email Id"    #uname />
+          <mat-hint *ngIf="username.touched && username.invalid" class="error">Username/Email Id is invalid</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-7 form-item password">
+        <mat-form-field class="col-lg-12">
+          <mat-label><mat-icon class="mat-18">lock_open</mat-icon>Password</mat-label>
+          <input matInput [type]="passhide ? 'password' : 'text'" formControlName="password"  #pass >
+          <button type="button" mat-icon-button matSuffix (click)="passhide=!passhide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passhide">
+          <mat-icon>{{passhide ? "visibility" : "visibility_off"}}</mat-icon>
+          </button>
+          <mat-hint  *ngIf="!userFound" class="error">User not found</mat-hint>
+          <mat-hint *ngIf="fail" class="error">Username and password does not match</mat-hint>
+        </mat-form-field>
+      </div>
+
+
+      <a routerLink="forget-password">forgot password? </a>
+      <a routerLink="create-student-account" style="margin-left: 40px;"> Create Student Account..?</a>
+      <div class="col-lg-12">
+        <button mat-raised-button [color]="(userLogin.valid) ? 'primary' : 'warn'" (click)="advSub = true" [type]="(userLogin.valid) ? 'submit' : 'button'" class="submit">Submit</button>
+      </div>
+
+
+    </form>
+  </div>
+</div>

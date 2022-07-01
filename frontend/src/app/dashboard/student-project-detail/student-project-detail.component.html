@@ -1,0 +1,84 @@
+<div class="container1">
+    <div class="nav">    
+        <div class="right">
+            <ul>
+                <li routerLink="../forget-password">Reset Password</li>
+                <li  (click)="logout()">Logout</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="banner">
+        <h2>{{project.PRO_ID}} - {{project.PRO_TITLE}}</h2>
+    </div>
+
+    <div class="container">
+        <button class="btn btn-dark" style="float: right;" routerLink="../../projects-blog">Back</button>
+        <div class="cardbody m-3">
+            <h3 class="text-center" style="color: rgb(30, 84, 154);">Basic Details</h3>
+            <hr>
+            <div class="lists">
+                <ul class="basicDetailsList1"> 
+                    <li><b>Department : </b>{{project.DEPARTMENT}}</li>
+                    <li><b>Semester : </b>{{project.SEMESTER}}</li>
+                    <li><b>Project Level : </b>{{project.LEVEL}}</li>
+                    <li><b>Project Type : </b>{{project.PRO_TYPE}}</li>
+                    <li><b>Done in : </b>{{project.YEAR}}</li>
+                    <li><b>Guided By : </b>{{project.GUIDE}}</li>
+                </ul>
+                <!-- <ul class="basicDetailsList2">
+                    
+                    
+                    
+                </ul> -->
+            </div>
+        </div>
+        <div class="cardbody">
+            <h3 class="text-center" style="color: rgb(30, 84, 154);">Documents</h3>
+            <hr>
+            <div class="docs">
+                <div *ngIf="isDocuments(); else notNullDocumnets">
+                    <p class="text-center"  style="color: rgb(255, 0, 0);">*No Documents uploaded</p>
+                </div>
+               
+                <ng-template #notNullDocumnets>
+                    <button *ngIf="(project.SYNOPSIS!=null && project.SYNOPSIS!='') "  class="btn btn-primary m-2" (click)="viewSynopsis()">Synopsis</button>
+                    <button *ngIf="project.REPORT!=null && project.REPORT!='' " class="btn btn-primary m-2" (click)="viewReport()">Report</button>
+                    <button *ngIf="project.PPT!=null && project.PPT!='' " class="btn btn-primary" (click)="viewPpt()">Presentation</button><br>
+                </ng-template>
+              </div>
+
+              <div class="students col-lg-12 mt-5" >
+                <h3 class="text-center" style="color: rgb(30, 84, 154);">Students Details</h3><hr>
+                <table class="table table-borderless table-md col-lg-6">
+                  <thead>
+                    <th>Name</th>
+                    <th>USN</th>
+                    <!-- <th>Mobile No</th>
+                    <th>Email ID</th> -->
+                    <!-- <th>Academic Batch</th> -->
+                  </thead>
+                  <tr *ngFor="let stu of project.students; let i=index; ">
+                    <td>{{stu.NAME}}</td>
+                    <td>{{stu.USN}}</td>
+                    <!-- <td>{{stu.MOBILE_NO}}</td>
+                    <td>{{stu.EMAIL}}</td> -->
+                    <!-- <td>{{stu.ACADEMIC_BATCH}}</td> -->
+                  </tr>
+                </table>
+              </div>
+
+              <div class="reviews mt-5 mb-5">
+                <h3 class="text-center" style="color: rgb(60, 94, 163);">Reviews</h3><hr>
+                <div *ngIf="project.reviews.length==0">
+                    <p  class="text-center"  style="color: rgb(255, 0, 0);">*Review Details not present</p>
+                </div>
+                <ul *ngFor="let review of project.reviews">
+                    <li><b>{{review.LABEL}}</b> : {{review.DESCRIPTION}}</li>
+                </ul>
+              </div>
+        </div>
+    </div>
+<br><br><br>
+
+</div>

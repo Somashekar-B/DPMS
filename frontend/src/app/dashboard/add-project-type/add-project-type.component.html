@@ -1,0 +1,96 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content">
+      <div class="header text-center">
+        <h1 *ngIf="(typecode==undefined && typelevel==undefined)">++ Add New Project Type</h1>
+        <h1 *ngIf="(typecode!=undefined && typelevel!=undefined)">Update Project Type</h1>
+      </div>
+      <!-- <mat-divider></mat-divider> -->
+      <div class="typeForm animate__animated animate__fadeIn">
+        <div class="msg">
+        <span *ngIf="success && (typecode==undefined && typelevel==undefined)" class=" alert alert-success text-center">You have successfully registered a new Project Type</span>
+        <span *ngIf="fail && (typecode==undefined && typelevel==undefined)" class=" alert alert-danger text-center">Entry Failed Project Type Code may already exist for {{level.value}}</span>
+        <span *ngIf="success && (typecode!=undefined && typelevel!=undefined)" class=" alert alert-success text-center">You have successfully updated the Project Type</span>
+        <span *ngIf="fail && (typecode!=undefined && typelevel!=undefined)" class=" alert alert-danger text-center">Entry Failed Project Type Code may already exist for {{level.value}}</span>
+        <span *ngIf="invalid" class=" alert alert-danger text-center">Project Type doesn't exist</span>
+      </div>
+        <form [formGroup]="typeForm" (ngSubmit)="onSubmit()" class="form-group col-lg-12 form">
+          <div class="col-lg-12 form-item">
+
+            <mat-form-field class="col-lg-6">
+
+              <mat-label>Type Name</mat-label>
+              <input matInput  type="text" name="name"  formControlName="TYPE_NAME" #tname placeholder="Enter new Project Type name" />
+              <mat-hint *ngIf="(tname.value.length==0 && tname.touched) || (tname.value.length==0 && advSub); else elseblock" class="error">Type Name is required</mat-hint>
+              <ng-template #elseblock>
+                <mat-hint *ngIf="tname.touched && tname.invalid" class="error">Type Name is invalid</mat-hint>
+              </ng-template>
+
+            </mat-form-field>
+          </div>
+
+          <div class="col-12 form-item">
+
+            <mat-form-field  class="col-lg-6">
+              <mat-label>Type Code</mat-label>
+              <input matInput  type="text" name="username" formControlName="TYPE_CODE" placeholder="Enter Type Code"  #tcode />
+              <mat-hint *ngIf="(tcode.value.length==0 && tcode.touched) || (tcode.value.length==0 && advSub); else uelseblock" class="error">Type Code is required</mat-hint>
+              <ng-template #uelseblock>
+                <mat-hint *ngIf="tcode.touched && tcode.invalid" class="error">Type Code is invalid</mat-hint>
+              </ng-template>
+            </mat-form-field>
+
+
+
+            <mat-form-field  class="col-lg-6">
+              <mat-label>Semester</mat-label>
+              <input matInput  type="number" name="mobNo" formControlName="SEMESTER" #sem placeholder="Enter Semester" />
+              <mat-hint *ngIf="(sem.value.length==0 && sem.touched) || (sem.value.length==0 && advSub); else mobelseblock"  class="error">Semester required</mat-hint>
+              <ng-template #mobelseblock>
+                <mat-hint *ngIf="sem.touched && sem.invalid" class="error">Semester is invalid</mat-hint>
+              </ng-template>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-12 form-item">
+
+            <mat-form-field  class="col-lg-6">
+              <mat-label>Level</mat-label>
+              <mat-select formControlName="LEVEL"  #level>
+                <mat-option value="UG" selected>UG</mat-option>
+                <mat-option value="PG">PG</mat-option>
+              </mat-select>
+              <mat-hint *ngIf="level.value.length==0 && advSub" class="error">Please select a level</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field  class="col-lg-6">
+              <mat-label>Department</mat-label>
+              <mat-select formControlName="DEPARTMENT"  #dep>
+                <mat-option value="CS" selected>Computer science</mat-option>
+              </mat-select>
+              <mat-hint *ngIf="dep.value.length==0 && advSub" class="error">Please select a department</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div class="col-lg-6">
+              <input  type="checkbox" name="ab" formControlName="AVAIL_BATCHES" #ab /><mat-label for="ab">Avail Batches</mat-label>
+            </div>
+          </div>
+
+
+            <!-- <h1  *ngIf="subbut.disabled">Button is disabled</h1> -->
+          <div class="col-lg-12">
+            <button mat-raised-button [color]="typeForm.valid ? 'primary' : 'warn'" (click)="advSub = true" [type]="typeForm.valid ? 'submit' : 'button'" class="submit" *ngIf="(typecode==undefined && typelevel==undefined)">Submit</button>
+            <button mat-raised-button [color]="typeForm.valid ? 'primary' : 'warn'" (click)="advSub = true" [type]="typeForm.valid ? 'submit' : 'button'" class="submit" *ngIf="(typecode!=undefined && typelevel!=undefined)" [disabled]="invalid">Update</button>
+            <button class="btn btn-dark" (click)="returnBack()" *ngIf="(typecode!=undefined && typelevel!=undefined)">Return to Project types list</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

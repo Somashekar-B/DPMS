@@ -1,0 +1,74 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="content ">
+      <div class="header text-center">
+        <h1>All Users In Your Department</h1>
+      </div>
+
+      <div class="msg">
+        <span *ngIf="success" class="alert alert-success text-center">User has been removed successfully</span>
+        <span *ngIf="!mailSent" class="alert alert-danger text-center">User has been deleted but failed to send mail</span>
+        <span *ngIf="fail" class="alert alert-danger text-center">Failed to remove user: Unknown Error</span>
+        <span *ngIf="accessChangesuccess" class="alert alert-success text-center"> Access Changed Successfully</span>
+        <span *ngIf="accessChangeFailure" class="alert alert-danger text-center"> Access Change Failed</span>
+      </div>
+
+      <div class="container animate__animated animate__fadeIn">
+        <table class="table table-striped hover" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <thead>
+            <tr>
+              <th>Sl No</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Department</th>
+              <th>User Type</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+           <tr *ngFor="let user of allUsers; let i=index">
+                 <td>{{i+1}}</td>
+                 <td>{{user.NAME}}</td>
+                 <td>{{user.MOBILE_NO}}</td>
+                 <td>{{user.EMAIL}}</td>
+                 <td>{{user.DEP_CODE}}</td>
+                 <td>{{user.USERTYPE}}</td>
+                 <td class="ops">
+                  <button style="cursor: pointer;" mat-raised-button color="primary" (click)="changeAccess(i)">Change Access</button>
+                  <a data-toggle="modal" style="cursor: pointer;" [attr.data-target]="'#section'+i"><mat-icon color="warn">delete</mat-icon></a>
+                </td>
+             </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngFor="let user of allUsers; let i=index;">
+      <div class="modal fade" id="{{'section' + i}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{user.NAME}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6>Are you sure you want to delete user - {{user.NAME}}</h6>
+            <small class="text-info">It will send an email to the user with your Name and Email ID with intimation of account deletion</small>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+              <button type="button" class="btn btn-danger"  data-dismiss="modal" (click)="deleteUser((user.USERNAME))">Yes Delete!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+</div>

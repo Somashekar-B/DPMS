@@ -1,0 +1,127 @@
+<div class="dashboard">
+  <div class="sidenav">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="body">
+    <div class="header text-center">
+      <h1>Profile</h1>
+    </div>
+
+    <div class="profile-card container animate__animated animate__fadeIn">
+      <div class="top">
+        <img [src]="photoUrl" alt="profile pic">
+        <div class="details">
+          <ul>
+            <li><h4>{{user.USERNAME}}</h4></li>
+            <li>{{user.EMAIL}}</li>
+            <li>+91 {{user.MOBILE_NO}}</li>
+          </ul>
+        </div>
+      </div>
+          <!-- <table class="details-table">
+            <tr>
+              <td><h4>{{user.USERNAME}}</h4></td>
+              <td *ngIf="disuDetails"><input type="text" class="form-control col-lg-12" #uname placeholder="enter new Username" /></td>
+              <td><i class="material-icons" id="done" *ngIf="disuDetails" (click)="usave()">done</i><i class="material-icons" id="close" *ngIf="disuDetails" (click)="uclose()">close</i> <i id="edit" class="material-icons" *ngIf="disuEdit" (click)="uedit()">edit</i></td>
+            </tr>
+            <tr>
+              <td><p>{{user.EMAIL}}</p></td>
+              <td *ngIf="discDetails"><input type="email" class="form-control col-lg-12" #email placeholder="Enter new Email ID" /></td>
+              <td><i class="material-icons" id="done" *ngIf="discDetails" (click)="esave()">done</i><i class="material-icons"  id="close" *ngIf="discDetails" (click)="eclose()">close</i> <i id="edit" class="material-icons" *ngIf="discEdit" (click)="eedit()">edit</i></td>
+            </tr>
+            <tr>
+              <td><p>{{user.MOBILE_NO}}</p></td>
+              <td *ngIf="dismDetails"><input type="number" class="form-control col-lg-12" #mobile placeholder="Enter new Mobile No" /></td>
+              <td><i class="material-icons" id="done" *ngIf="dismDetails" (click)="msave()">done</i><i class="material-icons"  id="close" *ngIf="dismDetails" (click)="mclose()">close</i> <i id="edit" class="material-icons" *ngIf="dismEdit" (click)="medit()">edit</i></td>
+            </tr>
+          </table> -->
+
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Update Details</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body animate__animated animate__fadeIn mb-3">
+                  <div class="msg text-center"><small *ngIf="success" class="mb-3 alert alert-success text-center">{{message}}</small>
+                    <div class="msg"><small *ngIf="fail" class=" alert alert-danger text-center">{{message}}</small>
+                    </div>
+                  <div class="content ">
+
+                    <!-- <mat-divider></mat-divider> -->
+                    <div class="userForm">
+
+                      <form [formGroup]="newUser" (ngSubmit)="updateuser()" class="form-group col-lg-12 form">
+                        <div class="col-lg-12 form-item">
+                          <mat-form-field class="col-lg-12">
+                            <mat-label><mat-icon class="mat-18">face</mat-icon>Name</mat-label>
+                            <input matInput  type="text" name="name"  formControlName="fname" #name placeholder="Enter new Faculty name"  />
+                              <mat-hint *ngIf="fname.touched && fname.invalid" class="error">Name is invalid</mat-hint>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col-lg-12 form-item">
+                          <mat-form-field class="col-lg-12">
+                            <mat-label><mat-icon class="mat-18">account_circle</mat-icon>Username</mat-label>
+                            <input matInput  type="text" name="username" formControlName="username" placeholder="Enter Username"  (keyup)="checkUsername(uname.value)"   #uname />
+                            <mat-hint *ngIf="(username.valid && userFound); else uelseblock" class="error">Username Already Taken</mat-hint>
+                            <ng-template #uelseblock>
+                              <mat-hint *ngIf="username.touched && username.invalid" class="error">Username is invalid</mat-hint>
+                            </ng-template>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col-lg-12 form-item">
+                          <mat-form-field class="col-lg-12">
+                            <mat-label><mat-icon class="mat-18">phone</mat-icon>Mobile Number</mat-label>
+                            <input matInput  type="number" name="mobNo" formControlName="mobNo" #mobno placeholder="Enter Mobile Number" />
+                              <mat-hint *ngIf="mobNo.touched && mobNo.invalid" class="error">Mobile number is invalid</mat-hint>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col-lg-12 form-item">
+
+                          <mat-form-field class="col-lg-12">
+                            <mat-label><mat-icon class="mat-18" *ngIf="email.valid">email</mat-icon>
+                              <mat-icon class="mat-18" *ngIf="email.invalid">mail_outline</mat-icon>Email</mat-label>
+                            <input matInput  type="email" name="email" formControlName="email" #emailfield placeholder="Enter Email"  (keyup)="checkEmail(emailfield.value)" />
+                            <mat-hint *ngIf="(email.valid && mailFound);" class="error">Email Id already registered</mat-hint>
+                              <mat-hint *ngIf="(email.touched && email.invalid)" class="error">Email is invalid</mat-hint>
+                          </mat-form-field>
+                        </div>
+
+                          <!-- <h1  *ngIf="subbut.disabled">Button is disabled</h1> -->
+                        <div class="col-lg-12">
+                            <label>Change Profile Image</label>
+                            <input type="file" accept="image/*" class="form-control-file" (change)="handleFIle($event)">
+                        </div><br>
+                        <small class="text-info">*You will be redirected to login once updated</small>
+                    <button mat-raised-button [color]="(newUser.valid && !userFound && !mailFound) ? 'primary' : 'warn'" (click)="advSub = true" [type]="(newUser.valid && !userFound && !mailFound) ? 'submit' : 'button'" class="submit">Submit</button>
+
+                      </form>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                  <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
+    <hr><hr>
+          <a class="btn btn-primary" style="color:white" routerLink="../forget-password">Reset Password</a>
+          <button class="btn btn-success ml-lg-4" data-toggle="modal" data-target="#exampleModalCenter">Edit details </button>
+    </div>
+
+  </div>
+</div>

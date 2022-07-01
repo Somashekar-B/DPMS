@@ -1,0 +1,48 @@
+.header{
+  display: block;
+  padding: 50px ;
+  justify-content: center;
+  /* background: linear-gradient(rgb(110, 48, 255),rgb(76, 195, 224)); */
+  background: linear-gradient(rgb(255, 102, 0),rgb(255, 196, 0));
+  border-radius: 0 0 70% 70%;
+  margin-bottom:40px;
+}
+
+table thead{
+  font-size: 13px;
+}
+
+tbody{
+  font-size: 12px;
+}
+
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
+}
+
+.ops{
+  white-space: nowrap;
+}
+
+.ops ul{
+  display: flex;
+}
+
+.ops ul li{
+  list-style: none;
+  padding: 5px 10px;
+}
+
+.ops >a{
+  padding: 2px 4px;
+}
+
+.msg{
+  display: flex;
+  justify-content: center;
+}
+

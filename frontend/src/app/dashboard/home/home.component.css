@@ -1,0 +1,136 @@
+*{
+  transition: 0.3s ease;
+}
+
+.header{
+  display: block;
+  padding: 30px ;
+  justify-content: center;
+  background: linear-gradient(rgb(193, 89, 253),rgb(76, 195, 224));
+  /* background: linear-gradient(rgb(255, 102, 0),rgb(255, 196, 0)); */
+  border-radius: 0 0 70% 70%;
+  margin-bottom:10px;
+}
+
+.header h1{
+  font-weight: 800;
+  color: rgb(255, 255, 255);
+  font-size: 50px;
+}
+
+.header p{
+  color: black;
+  font-weight: 100;
+  font-size: 20px;
+}
+
+.contentBody{
+  margin-top: 30px;
+  position: relative;
+  width:100%;
+}
+
+.contentBody h2{
+  text-align: center;
+  font-size:30px;
+  font-weight:bolder;
+}
+
+.tabs{
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabs .projects{
+  margin: 10px 40px 10px 0;
+  text-align: center;
+  /* background:  linear-gradient(rgba(1, 151, 119, 0.6),rgba(10, 235, 77, 0.6),rgba(5, 221, 88, 0.8)),url('../../../images/undraw_visual_data_b1wx.png'); */
+  background:  linear-gradient(rgba(255, 94, 0, 0.6),rgba(255, 187, 0, 0.6),rgba(255, 217, 0, 0.6)),url('/assets/images/undraw_visual_data_b1wx.png');
+  background-size: cover;
+  background-position: center;
+  padding: 30px 100px;
+  max-width: 300px;
+  min-width: 300px;
+  min-height: 170px;
+  max-height: 170px;
+  color: rgb(0, 0, 0);
+  border-radius: 40px 0;
+
+  /* border: 2px solid black; */
+
+}
+
+.tabs .projects:hover{
+  /* transform: scale(1.2); */
+  box-shadow: 2px 0 10px grey;
+}
+
+
+.tabs h4, .tabs2 h4{
+  font-weight: bolder;
+  font-size: 50px;
+}
+
+.tabs h3 , .tabs2 h3{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.tabs .students{
+  margin: 10px 0 10px 40px;
+  text-align: center;
+  background:  linear-gradient(rgba(255, 105, 5, 0.8),rgba(255, 171, 14, 0.6),rgba(255, 208, 1, 0.6)),url('/assets/images/undraw_exams_g4ow.png');
+  background-size: cover;
+  background-position: center;
+  padding: 30px 100px;
+  max-width: 300px;
+  max-height: 170px;
+  min-width: 300px;
+  min-height: 170px;
+  color: rgb(0, 0, 0);
+  border-radius: 0 40px;
+
+  /* box-shadow: 2px 0 10px grey; */
+}
+
+.tabs .students:hover{
+  /* transform: scale(1.2); */
+  box-shadow: 2px 0 10px grey;
+}
+
+.tabs2{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.tabs2 .faculty{
+  margin: 10px 0;
+  text-align: center;
+  /* background: linear-gradient(rgba(150, 27, 233,0.8),rgba(144, 1, 180, 0.6),rgba(236, 62, 252, 0.6)),url('../../../images/undraw_teacher_35j2.png'); */
+  background: linear-gradient(rgba(255, 0, 76, 0.8),rgba(255, 0, 55, 0.6),rgba(255, 102, 0, 0.6)),url('/assets/images/undraw_teacher_35j2.png');
+  background-size: cover;
+  background-position: center;
+  padding: 30px 100px;
+  max-width: 300px;
+  min-width: 300px;
+  min-height: 170px;
+  max-height: 170px;
+  color: white;
+  border-radius:20px 20px 0px 0px;
+  /* border: 2px solid black; */
+}
+
+@media screen and (max-width:1000px){
+  .tabs{
+    display: block;
+    text-align: center;
+  }
+
+  .tabs .students, .tabs .projects{
+    margin:40px auto;
+  }
+}
