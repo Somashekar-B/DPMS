@@ -105,13 +105,13 @@ exports.approve = async (req, res, next) => {
             secure: false,
             requireTLS: true,
             auth: {
-                user: 'myhobbyprojects80@gmail.com',
-                pass:'xwjrucjogzzeopod'
+                user: 'yourmail',
+                pass:'yourmailpassword'
             }
         })
 
         var mailOptions={
-            from: 'myhobbyprojects80@gmail.com',
+            from: 'yourmail',
             to: student[0].EMAIL,
             subject: "DPMS - Account Approved",
             text: `Hello ${student[0].NAME},\n\nYour account to DPMS has been approved..:) \n\n\nGet all projects knowledge as you want and create your own!!`
@@ -163,12 +163,12 @@ exports.reject = async (req, res, next) => {
             secure: false,
             requireTLS: true,
             auth: {
-                user: 'myhobbyprojects80@gmail.com',
-                pass:'xwjrucjogzzeopod'
+                user: 'yourmail',
+                pass:'yourmailpassword'
             }
         })
         var mailOptions={
-            from: 'myhobbyprojects80@gmail.com',
+            from: 'yourmail',
             to: student[0].EMAIL,
             subject: "DPMS - Account Rejected",
             text: `Hello ${student[0].NAME},\n\nYour account to DPMS has been rejected..:( \n\n\nPlease check with your Guide/Mentor and try again with right details`
