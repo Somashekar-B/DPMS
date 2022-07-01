@@ -264,13 +264,13 @@ exports.deleteUser = async (req,res,next) => {
                 secure: false,
                 requireTLS: true,
                 auth: {
-                    user: 'sdmcetcseprojects@gmail.com',
-                    pass:'tqepcbpyasvtvbmz'
+                    user: 'yourmail',
+                    pass:'yourapppasword'
                 }
             })
 
             var mailOptions={
-                from: 'sdmcetcseprojects@gmail.com',
+                from: 'yourmail',
                 to: req.body.delEmail,
                 subject: "DPMS - Account Deleted",
                 text: `Your DPMS account has been removed by ${req.body.name} with email id ${req.body.email}`
@@ -320,8 +320,8 @@ exports.forgetPassword = async (req, res, next) => {
                 secure: false,
                 requireTLS: true,
                 auth: {
-                    user: 'sdmcetcseprojects@gmail.com',
-                    pass: 'tqepcbpyasvtvbmz'
+                    user: 'yourmail',
+                    pass: 'yourapppassword'
                 }
             })
 
@@ -335,7 +335,7 @@ exports.forgetPassword = async (req, res, next) => {
             const link = `http://192.168.69.47:4200/reset-password/${user[0].EMAIL}/${token}`
             
             var mailOptions={
-                from: 'sdmcetcseprojects@gmail.com',
+                from: 'yourmail',
                 to: req.body.email,
                 subject: "DPMS - Password Reset Link",
                 text: `Use the following link to reset the password it is valid for 15 minutes \n\n ${link}`
@@ -474,13 +474,13 @@ exports.updateAccess = async (req, res, next) => {
                 secure: false,
                 requireTLS: true,
                 auth: {
-                    user: 'sdmcetcseprojects@gmail.com',
-                    pass:'tqepcbpyasvtvbmz'
+                    user: 'yourmail',
+                    pass:'yourapppassword'
                 }
             })
 
             var mailOptions={
-                from: 'sdmcetcseprojects@gmail.com',
+                from: 'yourmail,
                 to: req.body.data.email,
                 subject: "DPMS - Access Change Update",
                 text: `Hello ${req.body.data.name},\n\nYour Access to DPMS portal has changed from ${req.body.data.oldAccess} to ${req.body.data.newAccess} by ${req.body.data.admin}`
